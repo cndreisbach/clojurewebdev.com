@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'rake'
-gem 'rdiscount'
+gem 'maruku'
 gem 'jekyll'
 
 gem 'rmagick'
