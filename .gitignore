@@ -13,3 +13,6 @@ Thumbs.db
 _assets/bootstrap/tests
 node_modules/
 
+bin
+_vendor
+.bundle
