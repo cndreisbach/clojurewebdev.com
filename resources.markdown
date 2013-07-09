@@ -15,6 +15,7 @@ Here are some great resources when you want to learn more about web development 
 
 * [Basic Web Development with Clojure](http://clojure-doc.org/articles/tutorials/basic_web_development.html)
 * [Modern ClojureScript](https://github.com/magomimmo/modern-cljs)
+* [Pedestal App Tutorial](https://github.com/pedestal/app-tutorial)
 
 ## Frameworks
 
