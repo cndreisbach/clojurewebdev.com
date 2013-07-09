@@ -9,7 +9,9 @@
 
 #+BEGIN_HTML
 <p class="presenters">
-Clinton Dreisbach
+Clinton Dreisbach<br />
+@cndreisbach<br />
+<a href="http://clojurewebdev.com">clojurewebdev.com</a>
 </p>
 #+END_HTML
 
@@ -39,6 +41,11 @@ introductions.)
 #+BEGIN_CENTER
 Web development is /too big/.
 #+END_CENTER
+
+*** Notes                                                             :notes:
+
+The problem with web development is that is it too big. What do I mean
+by that? Let's go to the next slide and see.
 
 ** Many languages                                                     :slide:
 
@@ -572,8 +579,6 @@ you can return are files, InputStreams, references and functions.
 Let's take a few minutes and look at the sample application we have so
 far, so you can see how all this fits together.
 
-tag: ex-compojure
-
 ** Templating                                                         :slide:
 
 - HTML
@@ -658,8 +663,6 @@ last example.
 
 Let's look at the views we've created so far so we can see how this
 all fits together.
-
-tag: ex-hiccup
 
 ** JSON generation with Cheshire                                      :slide:
 
@@ -933,8 +936,6 @@ we are not going to cover that here.
 
 Let's look at the application now to see how all this fits together.
 
-tag: ex-noir
-
 ** REST APIs with Liberator                                           :slide:
 
 - Liberator provides resources
@@ -1157,8 +1158,6 @@ past.
 Let's see how we have used Liberator to turn parts of our application
 into reusable resources.
 
-Tag: ex-liberator
-
 ** ClojureScript                                                      :slide:
 
 Compiles Clojure to JavaScript
@@ -1245,7 +1244,113 @@ JavaScript interop. In the example I have, I'll show how I handled that.
 Let's look at some simple ClojureScript interaction and see how to
 reuse Hiccup templates between the front-end and back-end.
 
-Tag: ex-cljs
+** FRP with Javelin                                                   :slide:
+
+- FRP = Functional Reactive Programming
+- Imagine a spreadsheet
+
+*** Notes                                                             :notes:
+
+Javelin is a library for functional reactive programming in
+ClojureScript. What is functional reactive programming? It has a
+formal definition involving signals and events which I am not going to
+get into because it confuses me. The easiest way to think about FRP is
+to imagine a spreadsheet. You have some cells in a spreadsheet that
+you put a value into and you have other cells that have formulas in
+them. Whenever you change the value in one of those value cells, all the
+formula cells are immediately updated. 
+
+Now take that and apply that to programming, particularly your UI. You
+have data stored in value cells and you have formula cells that return
+calculated values or perform side effects. Whenever you update one of
+those value cells, all the formula cells are recomputed.
+
+** Javelin in action                                                  :slide:
+
+#+BEGIN_SRC clojure
+  (ns user
+    (:require tailrecursion.javelin)
+    (:require-macros [tailrecursion.javelin.macros :refer [cell]]))
+  
+  (let [a (cell 0)            ;; value cell of 0.
+        b (cell (inc a))      ;; formula cell of a+1.
+        c (cell (+ 42 a b))]  ;; formula cell of a+b+42.
+    (cell (.log js/console c))
+    ;; c's initial value, 43, is printed.
+    (swap! a inc)
+    ;; a was incremented, and its new value propagated (consistently)
+    ;; through b and c.  c's new value is printed to the console.
+    ;; What is c's new value?
+    )
+#+END_SRC
+
+*** Notes                                                             :notes:
+
+Here we have a simple use of Javelin. We use the cell macro to create
+a value cell with 0 in it and two formula cells calculating values
+based on =a=. Then, we have an unnamed cell that logs the value of =c=
+to the console.
+
+That unnamed cell will immediately run and output =c='s value to the
+console. When we then run =swap!= to change the value of =a=, =b= and
+=c= are recalculated and the new value of =c= will be output once
+again. What is the value of =c= after we run =swap=? Why?
+
+** Javelin in our program                                             :slide:
+
+#+BEGIN_SRC clojure
+  (ns we-owe.client
+    (:require [we-owe.views.templates :as templates]
+              [we-owe.dom :refer [replace!]]
+              [ajax.core :refer [GET]]            
+              tailrecursion.javelin)
+    (:require-macros [tailrecursion.javelin.macros :refer [cell]]))
+  
+  (def debts (cell '[]))
+  
+  (cell (replace! :#debts-list (templates/debts-list debts)))
+  
+  (GET "/debts.json"
+       {:format :json
+        :keywordize-keys true
+        :handler (fn [data] (reset! debts (:debts data)))})
+#+END_SRC
+
+*** Notes                                                             :notes:
+
+Here we have an example of Javelin in our program. If you remember, we
+previously replaced parts of our HTML in our success handler when we
+made an Ajax request to get the debts. This time, we just reset the
+value in the =debts= cell. Since we have another cell that updates the
+HTML, it will be updated when the value of =debts= is updated.
+
+This isn't that much more useful than what we had, but it can become
+very useful when your data can be updated from different places in
+your code.
+
+** App review                                                         :slide:
+
+Let's look at one way we used Javelin in our code to do something that
+would have been hard previously.
+
+*** Notes                                                             :notes:
+
+Show how we have Javelin in our code updating as I've shown previously. Then:
+
+Let's say we wanted to keep a record of all transactions made from
+this page. We have that info on the server, but we're not sending it
+with the JSON response. Let's use Javelin to update a vector of new
+debts every time we submit the form.
+
+Then show how that works.
+
+** Summary                                                            :slide:
+
+- Ring is designed around a function that takes a request and returns a response
+- Compojure and Liberator are layers on top of that, but do the same thing
+- Hiccup and Cheshire generate HTML and JSON respectively
+- Garden and ClojureScript generate CSS and JavaScript
+- lib-noir provides sessions and helper functions
 
 * Pulling Things Together
 ** Pulling Things Together                                            :slide:
@@ -1329,6 +1434,244 @@ Let's take a look at what this template gives us.
                ["src/{{sanitized}}/foo.clj"
                 (render "foo.clj" data)])))
 #+END_SRC
+* Future Approaches
+** Pedestal                                                           :slide:
+
+- Developed by Relevance
+- New to the scene
+- Separates app into client and service
+- Good for JavaScript-heavy, single-page apps
+
+*** Notes                                                             :notes:
+
+Pedestal is a very new framework developed by Relevance, Inc. Full
+disclosure: I used to work for Relevance and saw some of the earliest
+versions of this. I'll be straight with you about Pedestal: it's a
+totally different approach and is under-documented, and so it can seem
+inpenetrable. I don't know it very well and I'm friends with its
+creators. I want to try to show you the most basic parts of it, though.
+
+The Pedestal /client/ is the front-end of the application and the
+/service/ is the back-end, and you develop them in different leiningen
+projects. The service has some unique features, but is very much like
+what we've seen with Ring and Compojure, so I'm going to focus on the
+client.
+
+** The Pedestal client                                                :slide:
+
+#+BEGIN_SRC ditaa :file pedestal-client.png :cache yes :cmdline -r -s 1.5
++----------+    +---------------------+    +----------+           +----------+
+| {io}     |    |                     |    |          |           |          |
+| Messages +--->| Transform functions +--->| Emitters +--deltas-->| Renderer |
+| cFF8     |    | cFB5                |    | cF43     |           | cDE8     |
++----------+    +----------+----------+    +----------+           +----------+
+                           |
+                           |
+                           v
+                   +--------------+
+                   |              |
+                   | Side effects |
+                   | c77A         |
+                   +--------------+
+#+END_SRC
+
+*** Notes                                                             :notes:
+
+The basics of a Pedestal client are simple. You create transform
+functions, which take messages and alter your data model. There's a
+few things you can do in transform functions, like combine messages
+and execute side effects, which we'll skip here. Transform functions
+are associated with particular parts of your data model. They take a
+message and return the updated data model and pass that to your
+emitters. The emitters use that to send /deltas/ - changes in your
+application state - to the renderer, which updates the DOM to show
+your changes.
+
+Imagine that you have a simple counter on a page. Your Pedestal client
+application receives a message saying increase your counter. You have
+a transform function associated with your counter that takes the
+message and updates the counter. It sends the new value of the counter
+to an emitter, which sends a message to your renderer that says the
+counter has this new value. The renderer updates the DOM and the user
+sees the new value of the counter.
+
+If that sounds very different from how you structure a web
+application, you are not alone. This is very powerful, but is a lot of
+infrastructure. Let's see parts of this in action.
+
+** A Pedestal transform function                                      :slide:
+#+BEGIN_SRC clojure
+  (defn inc-transform [old-value message]
+    ((fnil inc 0) old-value))
+  
+  (def example-app
+    {;; Send any :inc message with the path :my-counter to the
+     ;; inc-transform function.
+     :transform [[:inc   [:my-counter] inc-transform]]})
+#+END_SRC
+
+*** Notes                                                             :notes:
+
+Our Pedestal app is just a map. Right now, we just have the
+key :transform in it, and :transform has a vector as its value. That
+vector is made up of vectors of transformations. We just have one and
+it says, take any message with the topic :inc and the path :my-counter
+and send that to our function, inc-transform. =inc-transform= takes
+the old value of :my-counter and the message and returns the old value
+plus 1. We use fnil in case the old value is nil.
+
+** A Pedestal emitter                                                 :slide:
+
+#+BEGIN_SRC clojure
+  (def example-app
+    {:transform [[:inc   [:my-counter] inc-transform]]
+  
+     ;; Configure a sequence of emitters.
+     ;; Emitters report change. This uses the default Pedestal
+     ;; emitter to report changes, or _deltas_.
+     
+     :emit [;; This default emitter sends all messages and prefixes
+            ;; their path with :main.
+            {:in #{[:*]} :fn (app/default-emitter [:main])}]})
+#+END_SRC
+
+*** Notes                                                             :notes:
+
+We've now added an emitter to the application. I mentioned the
+application state in passing before. Your data model and your
+application state are different views of the same reality. While your
+data model may be a flat map of keys and values, your application
+model is a tree that gets updated and emitters send those updates to
+the renderer. These are separate because the same data model may be
+used multiple times in an application and needs to be reflected in
+each part of the application state that is associated with a part of
+the view. It's a tree so you can tell the renderer to update a whole
+section at once.
+
+The emitter above is the default renderer, which just sends the
+changes on, and we tell it to put all changes under the node :main.
+
+Our renderer is set up separately from the app. In order to see it in
+action, let's actually go look at it in action.
+
+** Pedestal in action                                                 :slide:
+
+Let's go to the code.
+
+*** Notes                                                             :notes:
+
+Show Pedestal running - go to the index page to show the
+directions. Show =start.cljs= to see the renderer set up and then show
+=behavior.clj= so people can see our transforms and renderers. Explain
+the two emitters and :transform-enable. Go to the app and click the
+button, then show adding a new message topic.
+
+** Pedestal summary                                                   :slide:
+
+- Pedestal is focused on JS-heavy apps
+- It is very new and under development
+- The client takes messages, updates the data model, transforms the
+  app model and emits new messages to the renderer
+- The service sends and receives messages
+
+*** Notes                                                             :notes:
+
+Who all followed that? If you didn't, I apologize and I can try to
+answer questions, but as I said, Pedestal is still under-documented
+and I do not understand all of it. Luckily, there's a new tutorial on
+it written by one of the main developers, Brenton Ashworth, that
+either will be released soon or is released already.
+
+** Hoplon                                                             :slide:
+
+- client-side only
+- HTML + ClojureScript -> ClojureScript compiler
+
+*** Notes                                                             :notes:
+
+Hoplon is a framework for building JavaScript web app front-ends using
+HTML and ClojureScript. It is completely agnostic as to how your
+back-end is built -- if you have one -- and how it is served. It
+produces HTML and JavaScript files that you can serve however you
+like.
+
+The key point of Hoplon is that HTML is a s-expression language and
+can be treated as ClojureScript. You can mix HTML and ClojureScript in
+a Hoplon file and the HTML will be evaluated as ClojureScript,
+allowing you to create new widgets in ClojureScript that you can use
+in HTML.
+
+** Hoplon example (HTML)                                              :slide:
+
+#+BEGIN_SRC html
+  <html>
+    <body>
+      <script type="text/hoplon">
+        (ns example.index)
+  
+        (defn myfn [x y]
+          (div {:class "foo"}
+            (ul (li x)
+                (li y))))
+      </script>
+  
+      <h1>Hello, Hoplon</h1>
+  
+      <!-- an HTML syntax call to the myfn function -->
+      <myfn>
+        <div>first thing</div>
+        <div>second thing</div>
+      </myfn>
+    </body>
+  </html>
+#+END_SRC
+
+*** Notes                                                             :notes:
+
+The first thing you might notice in this example is the script tag. We
+have ClojureScript inside this tag, which is interesting. The second
+thing you'll probably notice is the =myfn= tag in the HTML. =myfn= is
+defined as a function in ClojureScript and is called from our HTML.
+
+** Hoplon example (CLJS)                                              :slide:
+
+#+BEGIN_SRC clojure
+  (ns example.index)
+  
+  (defn myfn [x y]
+    (div {:class "foo"}
+         (ul (li x)
+             (li y))))
+  
+  (html
+   (body
+    (h1 "Hello, Hoplon")
+    (myfn "first thing" "second thing")))
+#+END_SRC
+
+*** Notes                                                             :notes:
+
+This produces the exact same results as our previous
+example. Obviously, Hoplon is transforming our ClojureScript to add in
+functions for creating HTML structures.
+
+The ClojureScript version of this is much more concise, but being able
+to write your HTML as HTML can be a benefit.
+
+Hoplon does not give you anything you couldn't do yourself with
+ClojureScript, but the tooling is nice for being able to generate all
+the HTML and JavaScript you need.
+
+** Presioke example                                                   :slide:
+
+Let's look at a larger example of Hoplon at work.
+
+*** Notes                                                             :notes:
+
+Show Presioke code. Specifically, show =reactive-attributes= at work
+and how that allows us to easily hook up our code to react to events
+without all the normal JS plumbing.
+
 * Conclusion                                                          :slide:
 
 That's it! Go make a web!
@@ -1337,13 +1680,6 @@ That's it! Go make a web!
 
 clinton@dreisbach.us
 
-* TODO Future Approaches
-** TODO Hoplon and XML-RPC
-** TODO Pedestal?
-
-* TODO Topics I Didn't Cover
-** TODO XML-RPC (necessary-evil)
-** TODO FRP with Javelin
 * End
 
 #+PROPERTY: tangle yes
@@ -1365,13 +1701,4 @@ clinton@dreisbach.us
 # org-export-html-style-include-scripts: nil
 # End:
 
-
-* New Slides to Add
-** TODO New section on SQL Korma
-
-* Notes
-** TODO Compare more often to other things: Rails, Django, Connect
-
-* Notes from Sam
-** add example apps: qu talks to mongo
 

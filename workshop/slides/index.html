@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
 <meta name="title" content="Functional Web Development with Clojure"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2013-07-04 23:21:24 EDT"/>
+<meta name="generated" content="2013-07-09T10:31-0500"/>
 <meta name="author" content="Clinton Dreisbach"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -45,7 +45,11 @@
 <li><a href="#sec-2-1-1">2.1.1 Notes</a></li>
 </ul>
 </li>
-<li><a href="#sec-2-2">2.2 The Problem</a></li>
+<li><a href="#sec-2-2">2.2 The Problem</a>
+<ul>
+<li><a href="#sec-2-2-1">2.2.1 Notes</a></li>
+</ul>
+</li>
 <li><a href="#sec-2-3">2.3 Many languages</a>
 <ul>
 <li><a href="#sec-2-3-1">2.3.1 Notes</a></li>
@@ -264,6 +268,27 @@
 </ul>
 </li>
 <li><a href="#sec-4-42">4.42 App review</a></li>
+<li><a href="#sec-4-43">4.43 FRP with Javelin</a>
+<ul>
+<li><a href="#sec-4-43-1">4.43.1 Notes</a></li>
+</ul>
+</li>
+<li><a href="#sec-4-44">4.44 Javelin in action</a>
+<ul>
+<li><a href="#sec-4-44-1">4.44.1 Notes</a></li>
+</ul>
+</li>
+<li><a href="#sec-4-45">4.45 Javelin in our program</a>
+<ul>
+<li><a href="#sec-4-45-1">4.45.1 Notes</a></li>
+</ul>
+</li>
+<li><a href="#sec-4-46">4.46 App review</a>
+<ul>
+<li><a href="#sec-4-46-1">4.46.1 Notes</a></li>
+</ul>
+</li>
+<li><a href="#sec-4-47">4.47 Summary</a></li>
 </ul>
 </li>
 <li><a href="#sec-5">5 Pulling Things Together</a>
@@ -286,35 +311,61 @@
 <li><a href="#sec-5-4">5.4 rosebud.clj</a></li>
 </ul>
 </li>
-<li><a href="#sec-6">6 Conclusion</a></li>
-<li><a href="#sec-7">7 Future Approaches</a>
+<li><a href="#sec-6">6 Future Approaches</a>
 <ul>
-<li><a href="#sec-7-1">7.1 Hoplon and XML-RPC</a></li>
-<li><a href="#sec-7-2">7.2 Pedestal?</a></li>
+<li><a href="#sec-6-1">6.1 Pedestal</a>
+<ul>
+<li><a href="#sec-6-1-1">6.1.1 Notes</a></li>
 </ul>
 </li>
-<li><a href="#sec-8">8 Topics I Didn't Cover</a>
+<li><a href="#sec-6-2">6.2 The Pedestal client</a>
 <ul>
-<li><a href="#sec-8-1">8.1 XML-RPC (necessary-evil)</a></li>
-<li><a href="#sec-8-2">8.2 FRP with Javelin</a></li>
+<li><a href="#sec-6-2-1">6.2.1 Notes</a></li>
 </ul>
 </li>
-<li><a href="#sec-9">9 End</a></li>
-<li><a href="#sec-10">10 New Slides to Add</a>
+<li><a href="#sec-6-3">6.3 A Pedestal transform function</a>
 <ul>
-<li><a href="#sec-10-1">10.1 New section on SQL Korma</a></li>
+<li><a href="#sec-6-3-1">6.3.1 Notes</a></li>
 </ul>
 </li>
-<li><a href="#sec-11">11 Notes</a>
+<li><a href="#sec-6-4">6.4 A Pedestal emitter</a>
 <ul>
-<li><a href="#sec-11-1">11.1 Compare more often to other things: Rails, Django, Connect</a></li>
+<li><a href="#sec-6-4-1">6.4.1 Notes</a></li>
 </ul>
 </li>
-<li><a href="#sec-12">12 Notes from Sam</a>
+<li><a href="#sec-6-5">6.5 Pedestal in action</a>
 <ul>
-<li><a href="#sec-12-1">12.1 add example apps: qu talks to mongo</a></li>
+<li><a href="#sec-6-5-1">6.5.1 Notes</a></li>
 </ul>
 </li>
+<li><a href="#sec-6-6">6.6 Pedestal summary</a>
+<ul>
+<li><a href="#sec-6-6-1">6.6.1 Notes</a></li>
+</ul>
+</li>
+<li><a href="#sec-6-7">6.7 Hoplon</a>
+<ul>
+<li><a href="#sec-6-7-1">6.7.1 Notes</a></li>
+</ul>
+</li>
+<li><a href="#sec-6-8">6.8 Hoplon example (HTML)</a>
+<ul>
+<li><a href="#sec-6-8-1">6.8.1 Notes</a></li>
+</ul>
+</li>
+<li><a href="#sec-6-9">6.9 Hoplon example (CLJS)</a>
+<ul>
+<li><a href="#sec-6-9-1">6.9.1 Notes</a></li>
+</ul>
+</li>
+<li><a href="#sec-6-10">6.10 Presioke example</a>
+<ul>
+<li><a href="#sec-6-10-1">6.10.1 Notes</a></li>
+</ul></li>
+</ul>
+</li>
+<li><a href="#sec-7">7 Conclusion</a></li>
+<li><a href="#sec-8">8 End</a></li>
 </ul>
 </div>
 </div>
@@ -327,7 +378,9 @@
 
 
 <p class="presenters">
-Clinton Dreisbach
+Clinton Dreisbach<br />
+@cndreisbach<br />
+<a href="http://clojurewebdev.com">clojurewebdev.com</a>
 </p>
 
 </div>
@@ -393,6 +446,19 @@ introductions.)
 </p>
 </div>
 
+
+</div>
+
+<div id="outline-container-2-2-1" class="outline-4">
+<h4 id="sec-2-2-1"><span class="section-number-4">2.2.1</span> Notes &nbsp;&nbsp;&nbsp;<span class="tag"><span class="notes">notes</span></span></h4>
+<div class="outline-text-4" id="text-2-2-1">
+
+
+<p>
+The problem with web development is that is it too big. What do I mean
+by that? Let's go to the next slide and see.
+</p>
+</div>
 </div>
 
 </div>
@@ -1314,9 +1380,6 @@ you can return are files, InputStreams, references and functions.
 Let's take a few minutes and look at the sample application we have so
 far, so you can see how all this fits together.
 </p>
-<p>
-tag: ex-compojure
-</p>
 </div>
 
 </div>
@@ -1478,9 +1541,6 @@ last example.
 <p>
 Let's look at the views we've created so far so we can see how this
 all fits together.
-</p>
-<p>
-tag: ex-hiccup
 </p>
 </div>
 
@@ -1959,9 +2019,6 @@ we are not going to cover that here.
 <p>
 Let's look at the application now to see how all this fits together.
 </p>
-<p>
-tag: ex-noir
-</p>
 </div>
 
 </div>
@@ -2010,6 +2067,9 @@ example.
 
 
 
+<p>
+<img src="liberator1.png"  alt="liberator1.png" />
+</p>
 </div>
 
 </div>
@@ -2161,6 +2221,10 @@ passed and the second is the map to update the context with.
 
 
 
+
+<p>
+<img src="liberator2.png"  alt="liberator2.png" />
+</p>
 </div>
 
 </div>
@@ -2329,9 +2393,6 @@ past.
 Let's see how we have used Liberator to turn parts of our application
 into reusable resources.
 </p>
-<p>
-Tag: ex-liberator
-</p>
 </div>
 
 </div>
@@ -2489,9 +2550,206 @@ JavaScript interop. In the example I have, I'll show how I handled that.
 Let's look at some simple ClojureScript interaction and see how to
 reuse Hiccup templates between the front-end and back-end.
 </p>
+</div>
+
+</div>
+
+<div id="outline-container-4-43" class="outline-3">
+<h3 id="sec-4-43"><span class="section-number-3">4.43</span> FRP with Javelin &nbsp;&nbsp;&nbsp;<span class="tag"><span class="slide">slide</span></span></h3>
+<div class="outline-text-3" id="text-4-43">
+
+
+<ul>
+<li>FRP = Functional Reactive Programming
+</li>
+<li>Imagine a spreadsheet
+</li>
+</ul>
+
+
+
+</div>
+
+<div id="outline-container-4-43-1" class="outline-4">
+<h4 id="sec-4-43-1"><span class="section-number-4">4.43.1</span> Notes &nbsp;&nbsp;&nbsp;<span class="tag"><span class="notes">notes</span></span></h4>
+<div class="outline-text-4" id="text-4-43-1">
+
+
 <p>
-Tag: ex-cljs
+Javelin is a library for functional reactive programming in
+ClojureScript. What is functional reactive programming? It has a
+formal definition involving signals and events which I am not going to
+get into because it confuses me. The easiest way to think about FRP is
+to imagine a spreadsheet. You have some cells in a spreadsheet that
+you put a value into and you have other cells that have formulas in
+them. Whenever you change the value in one of those value cells, all the
+formula cells are immediately updated. 
 </p>
+<p>
+Now take that and apply that to programming, particularly your UI. You
+have data stored in value cells and you have formula cells that return
+calculated values or perform side effects. Whenever you update one of
+those value cells, all the formula cells are recomputed.
+</p>
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-4-44" class="outline-3">
+<h3 id="sec-4-44"><span class="section-number-3">4.44</span> Javelin in action &nbsp;&nbsp;&nbsp;<span class="tag"><span class="slide">slide</span></span></h3>
+<div class="outline-text-3" id="text-4-44">
+
+
+
+
+
+<pre class="src src-clojure">(<span style="color: #859900; font-weight: bold;">ns</span> user
+  (<span style="color: #d33682; font-weight: bold;">:require</span> tailrecursion.javelin)
+  (<span style="color: #d33682; font-weight: bold;">:require-macros</span> [tailrecursion.javelin.macros <span style="color: #d33682; font-weight: bold;">:refer</span> [cell]]))
+
+(<span style="color: #859900; font-weight: bold;">let</span> [a (cell 0)            <span style="color: #93a1a1;">;; </span><span style="color: #93a1a1;">value cell of 0.</span>
+      b (cell (<span style="color: #6c71c4; font-style: italic;">inc</span> a))      <span style="color: #93a1a1;">;; </span><span style="color: #93a1a1;">formula cell of a+1.</span>
+      c (cell (<span style="color: #6c71c4; font-style: italic;">+</span> 42 a b))]  <span style="color: #93a1a1;">;; </span><span style="color: #93a1a1;">formula cell of a+b+42.</span>
+  (cell (<span style="color: #268BD2; font-style: italic;">.log</span> js/console c))
+  <span style="color: #93a1a1;">;; </span><span style="color: #93a1a1;">c's initial value, 43, is printed.</span>
+  (<span style="color: #6c71c4; font-style: italic;">swap!</span> a inc)
+  <span style="color: #93a1a1;">;; </span><span style="color: #93a1a1;">a was incremented, and its new value propagated (consistently)</span>
+  <span style="color: #93a1a1;">;; </span><span style="color: #93a1a1;">through b and c.  c's new value is printed to the console.</span>
+  <span style="color: #93a1a1;">;; </span><span style="color: #93a1a1;">What is c's new value?</span>
+  )
+</pre>
+
+
+
+</div>
+
+<div id="outline-container-4-44-1" class="outline-4">
+<h4 id="sec-4-44-1"><span class="section-number-4">4.44.1</span> Notes &nbsp;&nbsp;&nbsp;<span class="tag"><span class="notes">notes</span></span></h4>
+<div class="outline-text-4" id="text-4-44-1">
+
+
+<p>
+Here we have a simple use of Javelin. We use the cell macro to create
+a value cell with 0 in it and two formula cells calculating values
+based on <code>a</code>. Then, we have an unnamed cell that logs the value of <code>c</code>
+to the console.
+</p>
+<p>
+That unnamed cell will immediately run and output <code>c</code>'s value to the
+console. When we then run <code>swap!</code> to change the value of <code>a</code>, <code>b</code> and
+<code>c</code> are recalculated and the new value of <code>c</code> will be output once
+again. What is the value of <code>c</code> after we run <code>swap</code>? Why?
+</p>
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-4-45" class="outline-3">
+<h3 id="sec-4-45"><span class="section-number-3">4.45</span> Javelin in our program &nbsp;&nbsp;&nbsp;<span class="tag"><span class="slide">slide</span></span></h3>
+<div class="outline-text-3" id="text-4-45">
+
+
+
+
+
+<pre class="src src-clojure">(<span style="color: #859900; font-weight: bold;">ns</span> we-owe.client
+  (<span style="color: #d33682; font-weight: bold;">:require</span> [we-owe.views.templates <span style="color: #d33682; font-weight: bold;">:as</span> templates]
+            [we-owe.dom <span style="color: #d33682; font-weight: bold;">:refer</span> [replace!]]
+            [ajax.core <span style="color: #d33682; font-weight: bold;">:refer</span> [<span style="color: #268BD2; font-style: italic;">GET</span>]]            
+            tailrecursion.javelin)
+  (<span style="color: #d33682; font-weight: bold;">:require-macros</span> [tailrecursion.javelin.macros <span style="color: #d33682; font-weight: bold;">:refer</span> [cell]]))
+
+(<span style="color: #859900; font-weight: bold;">def</span> <span style="color: #268BD2; font-weight: bold;">debts</span> (cell '[]))
+
+(cell (replace! <span style="color: #d33682; font-weight: bold;">:#debts-list</span> (templates/debts-list debts)))
+
+(<span style="color: #268BD2; font-style: italic;">GET</span> <span style="color: #00877C;">"/debts.json"</span>
+     {<span style="color: #d33682; font-weight: bold;">:format</span> <span style="color: #d33682; font-weight: bold;">:json</span>
+      <span style="color: #d33682; font-weight: bold;">:keywordize-keys</span> true
+      <span style="color: #d33682; font-weight: bold;">:handler</span> (<span style="color: #859900; font-weight: bold;">fn</span> [data] (<span style="color: #6c71c4; font-style: italic;">reset!</span> debts (<span style="color: #d33682; font-weight: bold;">:debts</span> data)))})
+</pre>
+
+
+
+</div>
+
+<div id="outline-container-4-45-1" class="outline-4">
+<h4 id="sec-4-45-1"><span class="section-number-4">4.45.1</span> Notes &nbsp;&nbsp;&nbsp;<span class="tag"><span class="notes">notes</span></span></h4>
+<div class="outline-text-4" id="text-4-45-1">
+
+
+<p>
+Here we have an example of Javelin in our program. If you remember, we
+previously replaced parts of our HTML in our success handler when we
+made an Ajax request to get the debts. This time, we just reset the
+value in the <code>debts</code> cell. Since we have another cell that updates the
+HTML, it will be updated when the value of <code>debts</code> is updated.
+</p>
+<p>
+This isn't that much more useful than what we had, but it can become
+very useful when your data can be updated from different places in
+your code.
+</p>
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-4-46" class="outline-3">
+<h3 id="sec-4-46"><span class="section-number-3">4.46</span> App review &nbsp;&nbsp;&nbsp;<span class="tag"><span class="slide">slide</span></span></h3>
+<div class="outline-text-3" id="text-4-46">
+
+
+<p>
+Let's look at one way we used Javelin in our code to do something that
+would have been hard previously.
+</p>
+
+</div>
+
+<div id="outline-container-4-46-1" class="outline-4">
+<h4 id="sec-4-46-1"><span class="section-number-4">4.46.1</span> Notes &nbsp;&nbsp;&nbsp;<span class="tag"><span class="notes">notes</span></span></h4>
+<div class="outline-text-4" id="text-4-46-1">
+
+
+<p>
+Show how we have Javelin in our code updating as I've shown previously. Then:
+</p>
+<p>
+Let's say we wanted to keep a record of all transactions made from
+this page. We have that info on the server, but we're not sending it
+with the JSON response. Let's use Javelin to update a vector of new
+debts every time we submit the form.
+</p>
+<p>
+Then show how that works.
+</p>
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-4-47" class="outline-3">
+<h3 id="sec-4-47"><span class="section-number-3">4.47</span> Summary &nbsp;&nbsp;&nbsp;<span class="tag"><span class="slide">slide</span></span></h3>
+<div class="outline-text-3" id="text-4-47">
+
+
+<ul>
+<li>Ring is designed around a function that takes a request and returns a response
+</li>
+<li>Compojure and Liberator are layers on top of that, but do the same thing
+</li>
+<li>Hiccup and Cheshire generate HTML and JSON respectively
+</li>
+<li>Garden and ClojureScript generate CSS and JavaScript
+</li>
+<li>lib-noir provides sessions and helper functions
+</li>
+</ul>
+
+
 </div>
 </div>
 
@@ -2660,8 +2918,433 @@ Let's take a look at what this template gives us.
 </div>
 
 <div id="outline-container-6" class="outline-2">
-<h2 id="sec-6"><span class="section-number-2">6</span> Conclusion &nbsp;&nbsp;&nbsp;<span class="tag"><span class="slide">slide</span></span></h2>
+<h2 id="sec-6"><span class="section-number-2">6</span> Future Approaches</h2>
 <div class="outline-text-2" id="text-6">
+
+
+</div>
+
+<div id="outline-container-6-1" class="outline-3">
+<h3 id="sec-6-1"><span class="section-number-3">6.1</span> Pedestal &nbsp;&nbsp;&nbsp;<span class="tag"><span class="slide">slide</span></span></h3>
+<div class="outline-text-3" id="text-6-1">
+
+
+<ul>
+<li>Developed by Relevance
+</li>
+<li>New to the scene
+</li>
+<li>Separates app into client and service
+</li>
+<li>Good for JavaScript-heavy, single-page apps
+</li>
+</ul>
+
+
+
+</div>
+
+<div id="outline-container-6-1-1" class="outline-4">
+<h4 id="sec-6-1-1"><span class="section-number-4">6.1.1</span> Notes &nbsp;&nbsp;&nbsp;<span class="tag"><span class="notes">notes</span></span></h4>
+<div class="outline-text-4" id="text-6-1-1">
+
+
+<p>
+Pedestal is a very new framework developed by Relevance, Inc. Full
+disclosure: I used to work for Relevance and saw some of the earliest
+versions of this. I'll be straight with you about Pedestal: it's a
+totally different approach and is under-documented, and so it can seem
+inpenetrable. I don't know it very well and I'm friends with its
+creators. I want to try to show you the most basic parts of it, though.
+</p>
+<p>
+The Pedestal <i>client</i> is the front-end of the application and the
+<i>service</i> is the back-end, and you develop them in different leiningen
+projects. The service has some unique features, but is very much like
+what we've seen with Ring and Compojure, so I'm going to focus on the
+client.
+</p>
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-6-2" class="outline-3">
+<h3 id="sec-6-2"><span class="section-number-3">6.2</span> The Pedestal client &nbsp;&nbsp;&nbsp;<span class="tag"><span class="slide">slide</span></span></h3>
+<div class="outline-text-3" id="text-6-2">
+
+
+
+
+<p>
+<img src="pedestal-client.png"  alt="pedestal-client.png" />
+</p>
+
+</div>
+
+<div id="outline-container-6-2-1" class="outline-4">
+<h4 id="sec-6-2-1"><span class="section-number-4">6.2.1</span> Notes &nbsp;&nbsp;&nbsp;<span class="tag"><span class="notes">notes</span></span></h4>
+<div class="outline-text-4" id="text-6-2-1">
+
+
+<p>
+The basics of a Pedestal client are simple. You create transform
+functions, which take messages and alter your data model. There's a
+few things you can do in transform functions, like combine messages
+and execute side effects, which we'll skip here. Transform functions
+are associated with particular parts of your data model. They take a
+message and return the updated data model and pass that to your
+emitters. The emitters use that to send <i>deltas</i> - changes in your
+application state - to the renderer, which updates the DOM to show
+your changes.
+</p>
+<p>
+Imagine that you have a simple counter on a page. Your Pedestal client
+application receives a message saying increase your counter. You have
+a transform function associated with your counter that takes the
+message and updates the counter. It sends the new value of the counter
+to an emitter, which sends a message to your renderer that says the
+counter has this new value. The renderer updates the DOM and the user
+sees the new value of the counter.
+</p>
+<p>
+If that sounds very different from how you structure a web
+application, you are not alone. This is very powerful, but is a lot of
+infrastructure. Let's see parts of this in action.
+</p>
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-6-3" class="outline-3">
+<h3 id="sec-6-3"><span class="section-number-3">6.3</span> A Pedestal transform function &nbsp;&nbsp;&nbsp;<span class="tag"><span class="slide">slide</span></span></h3>
+<div class="outline-text-3" id="text-6-3">
+
+
+
+
+<pre class="src src-clojure">(<span style="color: #859900; font-weight: bold;">defn</span> <span style="color: #268BD2; font-weight: bold;">inc-transform</span> [old-value message]
+  ((fnil inc 0) old-value))
+
+(<span style="color: #859900; font-weight: bold;">def</span> <span style="color: #268BD2; font-weight: bold;">example-app</span>
+  {<span style="color: #93a1a1;">;; </span><span style="color: #93a1a1;">Send any :inc message with the path :my-counter to the</span>
+   <span style="color: #93a1a1;">;; </span><span style="color: #93a1a1;">inc-transform function.</span>
+   <span style="color: #d33682; font-weight: bold;">:transform</span> [[<span style="color: #d33682; font-weight: bold;">:inc</span>   [<span style="color: #d33682; font-weight: bold;">:my-counter</span>] inc-transform]]})
+</pre>
+
+
+
+</div>
+
+<div id="outline-container-6-3-1" class="outline-4">
+<h4 id="sec-6-3-1"><span class="section-number-4">6.3.1</span> Notes &nbsp;&nbsp;&nbsp;<span class="tag"><span class="notes">notes</span></span></h4>
+<div class="outline-text-4" id="text-6-3-1">
+
+
+<p>
+Our Pedestal app is just a map. Right now, we just have the
+key :transform in it, and :transform has a vector as its value. That
+vector is made up of vectors of transformations. We just have one and
+it says, take any message with the topic :inc and the path :my-counter
+and send that to our function, inc-transform. <code>inc-transform</code> takes
+the old value of :my-counter and the message and returns the old value
+plus 1. We use fnil in case the old value is nil.
+</p>
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-6-4" class="outline-3">
+<h3 id="sec-6-4"><span class="section-number-3">6.4</span> A Pedestal emitter &nbsp;&nbsp;&nbsp;<span class="tag"><span class="slide">slide</span></span></h3>
+<div class="outline-text-3" id="text-6-4">
+
+
+
+
+
+<pre class="src src-clojure">(<span style="color: #859900; font-weight: bold;">def</span> <span style="color: #268BD2; font-weight: bold;">example-app</span>
+  {<span style="color: #d33682; font-weight: bold;">:transform</span> [[<span style="color: #d33682; font-weight: bold;">:inc</span>   [<span style="color: #d33682; font-weight: bold;">:my-counter</span>] inc-transform]]
+
+   <span style="color: #93a1a1;">;; </span><span style="color: #93a1a1;">Configure a sequence of emitters.</span>
+   <span style="color: #93a1a1;">;; </span><span style="color: #93a1a1;">Emitters report change. This uses the default Pedestal</span>
+   <span style="color: #93a1a1;">;; </span><span style="color: #93a1a1;">emitter to report changes, or _deltas_.</span>
+
+   <span style="color: #d33682; font-weight: bold;">:emit</span> [<span style="color: #93a1a1;">;; </span><span style="color: #93a1a1;">This default emitter sends all messages and prefixes</span>
+          <span style="color: #93a1a1;">;; </span><span style="color: #93a1a1;">their path with :main.</span>
+          {<span style="color: #d33682; font-weight: bold;">:in</span> #{[<span style="color: #d33682; font-weight: bold;">:*</span>]} <span style="color: #d33682; font-weight: bold;">:fn</span> (app/default-emitter [<span style="color: #d33682; font-weight: bold;">:main</span>])}]})
+</pre>
+
+
+
+</div>
+
+<div id="outline-container-6-4-1" class="outline-4">
+<h4 id="sec-6-4-1"><span class="section-number-4">6.4.1</span> Notes &nbsp;&nbsp;&nbsp;<span class="tag"><span class="notes">notes</span></span></h4>
+<div class="outline-text-4" id="text-6-4-1">
+
+
+<p>
+We've now added an emitter to the application. I mentioned the
+application state in passing before. Your data model and your
+application state are different views of the same reality. While your
+data model may be a flat map of keys and values, your application
+model is a tree that gets updated and emitters send those updates to
+the renderer. These are separate because the same data model may be
+used multiple times in an application and needs to be reflected in
+each part of the application state that is associated with a part of
+the view. It's a tree so you can tell the renderer to update a whole
+section at once.
+</p>
+<p>
+The emitter above is the default renderer, which just sends the
+changes on, and we tell it to put all changes under the node :main.
+</p>
+<p>
+Our renderer is set up separately from the app. In order to see it in
+action, let's actually go look at it in action.
+</p>
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-6-5" class="outline-3">
+<h3 id="sec-6-5"><span class="section-number-3">6.5</span> Pedestal in action &nbsp;&nbsp;&nbsp;<span class="tag"><span class="slide">slide</span></span></h3>
+<div class="outline-text-3" id="text-6-5">
+
+
+<p>
+Let's go to the code.
+</p>
+
+</div>
+
+<div id="outline-container-6-5-1" class="outline-4">
+<h4 id="sec-6-5-1"><span class="section-number-4">6.5.1</span> Notes &nbsp;&nbsp;&nbsp;<span class="tag"><span class="notes">notes</span></span></h4>
+<div class="outline-text-4" id="text-6-5-1">
+
+
+<p>
+Show Pedestal running - go to the index page to show the
+directions. Show <code>start.cljs</code> to see the renderer set up and then show
+<code>behavior.clj</code> so people can see our transforms and renderers. Explain
+the two emitters and :transform-enable. Go to the app and click the
+button, then show adding a new message topic.
+</p>
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-6-6" class="outline-3">
+<h3 id="sec-6-6"><span class="section-number-3">6.6</span> Pedestal summary &nbsp;&nbsp;&nbsp;<span class="tag"><span class="slide">slide</span></span></h3>
+<div class="outline-text-3" id="text-6-6">
+
+
+<ul>
+<li>Pedestal is focused on JS-heavy apps
+</li>
+<li>It is very new and under development
+</li>
+<li>The client takes messages, updates the data model, transforms the
+  app model and emits new messages to the renderer
+</li>
+<li>The service sends and receives messages
+</li>
+</ul>
+
+
+
+</div>
+
+<div id="outline-container-6-6-1" class="outline-4">
+<h4 id="sec-6-6-1"><span class="section-number-4">6.6.1</span> Notes &nbsp;&nbsp;&nbsp;<span class="tag"><span class="notes">notes</span></span></h4>
+<div class="outline-text-4" id="text-6-6-1">
+
+
+<p>
+Who all followed that? If you didn't, I apologize and I can try to
+answer questions, but as I said, Pedestal is still under-documented
+and I do not understand all of it. Luckily, there's a new tutorial on
+it written by one of the main developers, Brenton Ashworth, that
+either will be released soon or is released already.
+</p>
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-6-7" class="outline-3">
+<h3 id="sec-6-7"><span class="section-number-3">6.7</span> Hoplon &nbsp;&nbsp;&nbsp;<span class="tag"><span class="slide">slide</span></span></h3>
+<div class="outline-text-3" id="text-6-7">
+
+
+<ul>
+<li>client-side only
+</li>
+<li>HTML + ClojureScript -&gt; ClojureScript compiler
+</li>
+</ul>
+
+
+
+</div>
+
+<div id="outline-container-6-7-1" class="outline-4">
+<h4 id="sec-6-7-1"><span class="section-number-4">6.7.1</span> Notes &nbsp;&nbsp;&nbsp;<span class="tag"><span class="notes">notes</span></span></h4>
+<div class="outline-text-4" id="text-6-7-1">
+
+
+<p>
+Hoplon is a framework for building JavaScript web app front-ends using
+HTML and ClojureScript. It is completely agnostic as to how your
+back-end is built &ndash; if you have one &ndash; and how it is served. It
+produces HTML and JavaScript files that you can serve however you
+like.
+</p>
+<p>
+The key point of Hoplon is that HTML is a s-expression language and
+can be treated as ClojureScript. You can mix HTML and ClojureScript in
+a Hoplon file and the HTML will be evaluated as ClojureScript,
+allowing you to create new widgets in ClojureScript that you can use
+in HTML.
+</p>
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-6-8" class="outline-3">
+<h3 id="sec-6-8"><span class="section-number-3">6.8</span> Hoplon example (HTML) &nbsp;&nbsp;&nbsp;<span class="tag"><span class="slide">slide</span></span></h3>
+<div class="outline-text-3" id="text-6-8">
+
+
+
+
+
+<pre class="src src-html">&lt;<span style="color: #268BD2; font-weight: bold;">html</span>&gt;
+  &lt;<span style="color: #268BD2; font-weight: bold;">body</span>&gt;
+    &lt;<span style="color: #268BD2; font-weight: bold;">script</span> <span style="color: #6c71c4;">type</span>=<span style="color: #00877C;">"text/hoplon"</span>&gt;
+      (ns example.index)
+
+      (defn myfn [x y]
+        (div {:class <span style="color: #00877C;">"foo"</span>}
+          (ul (li x)
+              (li y))))
+    &lt;/<span style="color: #268BD2; font-weight: bold;">script</span>&gt;
+
+    &lt;<span style="color: #268BD2; font-weight: bold;">h1</span>&gt;<span style="font-weight: bold; text-decoration: underline;">Hello, Hoplon</span>&lt;/<span style="color: #268BD2; font-weight: bold;">h1</span>&gt;
+
+    <span style="color: #93a1a1;">&lt;!-- </span><span style="color: #93a1a1;">an HTML syntax call to the myfn function </span><span style="color: #93a1a1;">--&gt;</span>
+    &lt;<span style="color: #268BD2; font-weight: bold;">myfn</span>&gt;
+      &lt;<span style="color: #268BD2; font-weight: bold;">div</span>&gt;first thing&lt;/<span style="color: #268BD2; font-weight: bold;">div</span>&gt;
+      &lt;<span style="color: #268BD2; font-weight: bold;">div</span>&gt;second thing&lt;/<span style="color: #268BD2; font-weight: bold;">div</span>&gt;
+    &lt;/<span style="color: #268BD2; font-weight: bold;">myfn</span>&gt;
+  &lt;/<span style="color: #268BD2; font-weight: bold;">body</span>&gt;
+&lt;/<span style="color: #268BD2; font-weight: bold;">html</span>&gt;
+</pre>
+
+
+
+</div>
+
+<div id="outline-container-6-8-1" class="outline-4">
+<h4 id="sec-6-8-1"><span class="section-number-4">6.8.1</span> Notes &nbsp;&nbsp;&nbsp;<span class="tag"><span class="notes">notes</span></span></h4>
+<div class="outline-text-4" id="text-6-8-1">
+
+
+<p>
+The first thing you might notice in this example is the script tag. We
+have ClojureScript inside this tag, which is interesting. The second
+thing you'll probably notice is the <code>myfn</code> tag in the HTML. <code>myfn</code> is
+defined as a function in ClojureScript and is called from our HTML.
+</p>
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-6-9" class="outline-3">
+<h3 id="sec-6-9"><span class="section-number-3">6.9</span> Hoplon example (CLJS) &nbsp;&nbsp;&nbsp;<span class="tag"><span class="slide">slide</span></span></h3>
+<div class="outline-text-3" id="text-6-9">
+
+
+
+
+
+<pre class="src src-clojure">(<span style="color: #859900; font-weight: bold;">ns</span> example.index)
+
+(<span style="color: #859900; font-weight: bold;">defn</span> <span style="color: #268BD2; font-weight: bold;">myfn</span> [x y]
+  (div {<span style="color: #d33682; font-weight: bold;">:class</span> <span style="color: #00877C;">"foo"</span>}
+       (ul (li x)
+           (li y))))
+
+(html
+ (body
+  (h1 <span style="color: #00877C;">"Hello, Hoplon"</span>)
+  (myfn <span style="color: #00877C;">"first thing"</span> <span style="color: #00877C;">"second thing"</span>)))
+</pre>
+
+
+
+</div>
+
+<div id="outline-container-6-9-1" class="outline-4">
+<h4 id="sec-6-9-1"><span class="section-number-4">6.9.1</span> Notes &nbsp;&nbsp;&nbsp;<span class="tag"><span class="notes">notes</span></span></h4>
+<div class="outline-text-4" id="text-6-9-1">
+
+
+<p>
+This produces the exact same results as our previous
+example. Obviously, Hoplon is transforming our ClojureScript to add in
+functions for creating HTML structures.
+</p>
+<p>
+The ClojureScript version of this is much more concise, but being able
+to write your HTML as HTML can be a benefit.
+</p>
+<p>
+Hoplon does not give you anything you couldn't do yourself with
+ClojureScript, but the tooling is nice for being able to generate all
+the HTML and JavaScript you need.
+</p>
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-6-10" class="outline-3">
+<h3 id="sec-6-10"><span class="section-number-3">6.10</span> Presioke example &nbsp;&nbsp;&nbsp;<span class="tag"><span class="slide">slide</span></span></h3>
+<div class="outline-text-3" id="text-6-10">
+
+
+<p>
+Let's look at a larger example of Hoplon at work.
+</p>
+
+</div>
+
+<div id="outline-container-6-10-1" class="outline-4">
+<h4 id="sec-6-10-1"><span class="section-number-4">6.10.1</span> Notes &nbsp;&nbsp;&nbsp;<span class="tag"><span class="notes">notes</span></span></h4>
+<div class="outline-text-4" id="text-6-10-1">
+
+
+<p>
+Show Presioke code. Specifically, show <code>reactive-attributes</code> at work
+and how that allows us to easily hook up our code to react to events
+without all the normal JS plumbing.
+</p>
+</div>
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-7" class="outline-2">
+<h2 id="sec-7"><span class="section-number-2">7</span> Conclusion &nbsp;&nbsp;&nbsp;<span class="tag"><span class="slide">slide</span></span></h2>
+<div class="outline-text-2" id="text-7">
 
 
 <p>
@@ -2677,58 +3360,9 @@ clinton@dreisbach.us
 
 </div>
 
-<div id="outline-container-7" class="outline-2">
-<h2 id="sec-7"><span class="section-number-2">7</span> <span class="todo TODO">TODO</span> Future Approaches</h2>
-<div class="outline-text-2" id="text-7">
-
-
-</div>
-
-<div id="outline-container-7-1" class="outline-3">
-<h3 id="sec-7-1"><span class="section-number-3">7.1</span> <span class="todo TODO">TODO</span> Hoplon and XML-RPC</h3>
-<div class="outline-text-3" id="text-7-1">
-
-</div>
-
-</div>
-
-<div id="outline-container-7-2" class="outline-3">
-<h3 id="sec-7-2"><span class="section-number-3">7.2</span> <span class="todo TODO">TODO</span> Pedestal?</h3>
-<div class="outline-text-3" id="text-7-2">
-
-
-</div>
-</div>
-
-</div>
-
 <div id="outline-container-8" class="outline-2">
-<h2 id="sec-8"><span class="section-number-2">8</span> <span class="todo TODO">TODO</span> Topics I Didn't Cover</h2>
+<h2 id="sec-8"><span class="section-number-2">8</span> End</h2>
 <div class="outline-text-2" id="text-8">
-
-
-</div>
-
-<div id="outline-container-8-1" class="outline-3">
-<h3 id="sec-8-1"><span class="section-number-3">8.1</span> <span class="todo TODO">TODO</span> XML-RPC (necessary-evil)</h3>
-<div class="outline-text-3" id="text-8-1">
-
-</div>
-
-</div>
-
-<div id="outline-container-8-2" class="outline-3">
-<h3 id="sec-8-2"><span class="section-number-3">8.2</span> <span class="todo TODO">TODO</span> FRP with Javelin</h3>
-<div class="outline-text-3" id="text-8-2">
-
-</div>
-</div>
-
-</div>
-
-<div id="outline-container-9" class="outline-2">
-<h2 id="sec-9"><span class="section-number-2">9</span> End</h2>
-<div class="outline-text-2" id="text-9">
 
 
 
@@ -2741,64 +3375,13 @@ clinton@dreisbach.us
 
 
 </div>
-
-</div>
-
-<div id="outline-container-10" class="outline-2">
-<h2 id="sec-10"><span class="section-number-2">10</span> New Slides to Add</h2>
-<div class="outline-text-2" id="text-10">
-
-
-</div>
-
-<div id="outline-container-10-1" class="outline-3">
-<h3 id="sec-10-1"><span class="section-number-3">10.1</span> <span class="todo TODO">TODO</span> New section on SQL Korma</h3>
-<div class="outline-text-3" id="text-10-1">
-
-
-</div>
-</div>
-
-</div>
-
-<div id="outline-container-11" class="outline-2">
-<h2 id="sec-11"><span class="section-number-2">11</span> Notes</h2>
-<div class="outline-text-2" id="text-11">
-
-
-</div>
-
-<div id="outline-container-11-1" class="outline-3">
-<h3 id="sec-11-1"><span class="section-number-3">11.1</span> <span class="todo TODO">TODO</span> Compare more often to other things: Rails, Django, Connect</h3>
-<div class="outline-text-3" id="text-11-1">
-
-
-</div>
-</div>
-
-</div>
-
-<div id="outline-container-12" class="outline-2">
-<h2 id="sec-12"><span class="section-number-2">12</span> Notes from Sam</h2>
-<div class="outline-text-2" id="text-12">
-
-
-</div>
-
-<div id="outline-container-12-1" class="outline-3">
-<h3 id="sec-12-1"><span class="section-number-3">12.1</span> add example apps: qu talks to mongo</h3>
-<div class="outline-text-3" id="text-12-1">
-
-
-</div>
-</div>
 </div>
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2013-07-04 23:21:24 EDT</p>
+<p class="date">Date: 2013-07-09T10:31-0500</p>
 <p class="author">Author: Clinton Dreisbach</p>
-<p class="creator">Org version 7.8.11 with Emacs version 24</p>
+<p class="creator"><a href="http://orgmode.org">Org</a> version 7.9.3f with <a href="http://www.gnu.org/software/emacs/">Emacs</a> version 24</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
 
 </div>
